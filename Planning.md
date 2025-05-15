@@ -13,11 +13,7 @@
 
 
 
-# 📅 Calendar Compare – Project Plan (Detailed)
-
-This document outlines the step-by-step development roadmap for the Calendar Compare project, divided into clear sprints. Each sprint introduces new folders and files gradually and explains what they do.
-
----
+# 📅 Calendar Compare – Project Plan 
 
 ## ✅ Sprint 0 – Project Bootstrap
 
@@ -175,5 +171,3 @@ frontend/
 - Fetch and display group members.
 
 ---
-
-Would you like Sprint 3 (shared availability) and Sprint 4 (calendar UI + Slack notifications) written in the same format?
