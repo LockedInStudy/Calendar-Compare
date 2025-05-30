@@ -1,4 +1,34 @@
+# Python
 .venv/
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Environment files
 .env
+# Don't ignore the template file - this should be shared
+!.env.example
+
+# Database
+*.db
+instance/
+
+# Node.js
+node_modules/
+npm-debug.log*
+.npm
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build outputs
+dist/
+build/

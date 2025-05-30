@@ -1,54 +1,68 @@
-# Calendar Compare - Sprint 0 & 1 Implementation Guide
+# Calendar Compare - Complete Implementation Guide
 
 ## 📋 Overview
 
-This document explains the complete implementation of **Sprint 0** (Project Bootstrap) and **Sprint 1** (Google Login and Fetch Events) for the Calendar Compare application. The code is extensively commented to help developers with basic Python knowledge understand how everything works.
+This document provides a comprehensive guide to the **Calendar Compare** application implementation, covering all completed sprints (0, 1, and 2). The application allows teams to compare Google Calendar availability and manage groups for collaborative scheduling.
 
-## 🏗️ Project Structure
+## 🏗️ Complete Project Structure
 
 ```
 calendar-compare/
 ├── backend/                    # Flask backend application
 │   ├── app/
-│   │   ├── __init__.py        # Flask app factory with CORS setup
-│   │   ├── config.py          # Configuration settings
+│   │   ├── __init__.py        # Flask app factory with CORS and database setup
+│   │   ├── config.py          # Configuration settings and environment variables
 │   │   ├── routes.py          # Main routes (home, ping, example)
+│   │   ├── models.py          # SQLAlchemy database models (User, Group, GroupMembership)
 │   │   ├── auth/              # Authentication module
 │   │   │   ├── __init__.py    # Package initialization
 │   │   │   ├── routes.py      # Auth routes (/login, /callback, /logout, /status)
 │   │   │   └── google.py      # Google OAuth2 handling class
-│   │   └── calendars/         # Calendar operations module
+│   │   ├── calendars/         # Calendar operations module
+│   │   │   ├── __init__.py    # Package initialization
+│   │   │   ├── routes.py      # Calendar routes (/events, /busy-times, /calendars)
+│   │   │   └── services.py    # Calendar service class
+│   │   └── groups/            # Group management module
 │   │       ├── __init__.py    # Package initialization
-│   │       ├── routes.py      # Calendar routes (/events, /busy-times, /calendars)
-│   │       └── services.py    # Calendar service class
+│   │       └── routes.py      # Group routes (create, join, manage groups)
+│   ├── instance/
+│   │   └── calendar_compare.db # SQLite database file
+│   ├── archive/               # Archived test and development files
 │   └── run.py                 # Flask application entry point
 ├── frontend/                  # React frontend application
 │   ├── src/
 │   │   ├── components/
 │   │   │   ├── PingTest.jsx   # Backend connectivity test component
-│   │   │   └── EventList.jsx  # Calendar events display component
+│   │   │   ├── EventList.jsx  # Calendar events display component
+│   │   │   ├── GroupList.jsx  # User's groups display component
+│   │   │   └── MemberList.jsx # Group member management component
 │   │   ├── pages/
 │   │   │   ├── LoginPage.jsx  # Google OAuth login page
-│   │   │   └── Dashboard.jsx  # Calendar events dashboard
-│   │   ├── App.jsx            # Main app with navigation
+│   │   │   ├── Dashboard.jsx  # Main dashboard with calendar and groups
+│   │   │   ├── CreateGroup.jsx # Group creation form
+│   │   │   ├── JoinGroup.jsx  # Group joining form
+│   │   │   └── GroupDashboard.jsx # Individual group management page
+│   │   ├── styles/
+│   │   │   └── Groups.css     # Group-specific styling
+│   │   ├── App.jsx            # Main app with navigation system
 │   │   └── main.jsx           # React app entry point
+│   ├── archive/               # Archived test files
 │   └── package.json           # Frontend dependencies
-├── .env                       # Environment variables (secrets)
+├── .env                       # Environment variables (Google OAuth credentials)
 ├── .gitignore                 # Git ignore file
 ├── requirements.txt           # Python dependencies
-├── Makefile                   # Development commands (placeholder)
-├── Planning.md                # Project planning document
-└── README.md                  # Project overview
+├── Planning.md                # Project planning and roadmap
+└── README.md                  # Project overview and setup instructions
 ```
 
-## ✅ Sprint 0 - Project Bootstrap
+## ✅ Sprint 0 - Project Bootstrap (COMPLETE)
 
 ### 🎯 Goals Achieved
-- ✅ Set up Flask backend with proper structure
-- ✅ Set up React frontend with Vite
-- ✅ Enable communication between frontend and backend
-- ✅ Add `/ping` route for connectivity testing
-- ✅ CORS configuration for cross-origin requests
+- ✅ Flask backend with modular blueprint architecture
+- ✅ React frontend with Vite build system
+- ✅ CORS-enabled frontend-backend communication
+- ✅ Development environment setup and testing routes
+- ✅ Environment variable configuration system
 
 ### 🔧 Backend Implementation
 
@@ -277,3 +291,227 @@ The current implementation provides a solid foundation for:
 ---
 
 *This implementation serves as a complete foundation for the Calendar Compare application, with clear documentation and extensive commenting to help developers understand and extend the codebase.*
+
+## ✅ Sprint 2 - Group Creation & Management (COMPLETE)
+
+### 🎯 Goals Achieved
+- ✅ Allow users to create calendar comparison groups
+- ✅ Generate unique group codes for sharing
+- ✅ Let users join groups via passcode
+- ✅ Store group membership and manage user roles
+- ✅ Basic group dashboard showing all members
+- ✅ Comprehensive error handling and user feedback
+- ✅ Role-based permissions (admin/member)
+- ✅ Leave group functionality
+- ✅ Member management system
+- ✅ Extensive documentation for beginner developers
+
+### 🗄️ Database Implementation
+
+#### 1. Database Models (`app/models.py`)
+```python
+class User:
+    # User account information from Google OAuth
+    # Stores Google ID, email, name, timestamps
+    
+class Group:
+    # Group information and settings
+    # Auto-generated 6-character invitation codes
+    # Tracks creator and metadata
+    
+class GroupMembership:
+    # Junction table for user-group relationships
+    # Role-based permissions (owner, admin, member)
+    # Join timestamps and status tracking
+```
+
+**Database Relationships:**
+- Users can belong to multiple groups
+- Groups can have multiple members
+- Each membership has a specific role
+- Foreign keys ensure data integrity
+
+#### 2. Database Schema Features
+- **Auto-generated IDs**: Primary keys for all tables
+- **Invitation Codes**: Random 6-character alphanumeric codes
+- **Timestamps**: Track creation and join dates
+- **Role System**: Owner, admin, member permissions
+- **Cascading Deletes**: Proper cleanup when groups/users are removed
+
+### 🔧 Backend API Implementation
+
+#### 1. Group Routes (`app/groups/routes.py`)
+```python
+# GET /api/groups - List user's groups
+# POST /api/groups - Create new group
+# POST /api/groups/join - Join group with invitation code
+# GET /api/groups/<id> - Get specific group details
+# POST /api/groups/<id>/leave - Leave a group
+# GET /api/groups/<id>/members - List group members
+# DELETE /api/groups/<id>/members/<user_id> - Remove member (admin only)
+# PUT /api/groups/<id>/members/<user_id> - Update member role (admin only)
+```
+
+**Key Features:**
+- **Authentication Required**: All endpoints protected
+- **Role-based Access**: Different permissions for owners/admins/members
+- **Input Validation**: Comprehensive data validation
+- **Error Handling**: Detailed error messages and status codes
+- **Helper Functions**: Reusable code for user and group operations
+
+#### 2. API Security & Validation
+- **Session-based Authentication**: Requires valid user session
+- **Permission Checks**: Role-based access control
+- **Input Sanitization**: Prevents SQL injection and XSS
+- **Error Responses**: Consistent JSON error format
+- **Rate Limiting Ready**: Architecture supports future rate limiting
+
+### 🌐 Frontend Implementation
+
+#### 1. Group Creation (`src/pages/CreateGroup.jsx`)
+```jsx
+// Group creation form with validation
+// Real-time feedback for user input
+// Automatic navigation after successful creation
+// Error handling with user-friendly messages
+```
+
+**Features:**
+- Form validation for group name and description
+- Loading states during group creation
+- Success feedback with invitation code display
+- Error handling for network issues
+
+#### 2. Group Joining (`src/pages/JoinGroup.jsx`)
+```jsx
+// Simple form for entering invitation codes
+// Code validation and normalization
+// Automatic group joining flow
+// Success/error feedback
+```
+
+**Features:**
+- 6-character invitation code input
+- Real-time code formatting
+- Validation feedback
+- Automatic redirect after joining
+
+#### 3. Group Dashboard (`src/pages/GroupDashboard.jsx`)
+```jsx
+// Comprehensive group management interface
+// Member list with role indicators
+// Admin controls for group management
+// Leave group functionality
+```
+
+**Features:**
+- Group information display (name, description, member count)
+- Member list with roles and join dates
+- Admin controls (remove members, change roles)
+- Invitation code sharing
+- Leave group with confirmation
+- Back navigation to main dashboard
+
+#### 4. Supporting Components
+
+**GroupList Component (`src/components/GroupList.jsx`)**
+- Displays user's groups with statistics
+- Quick navigation to group dashboards
+- Group creation and joining shortcuts
+- Beautiful card-based layout
+
+**MemberList Component (`src/components/MemberList.jsx`)**
+- Member display with profile information
+- Role badges and indicators
+- Admin action buttons
+- Responsive member grid layout
+
+### 🎨 Enhanced User Interface
+
+#### 1. Navigation System (`src/App.jsx`)
+```jsx
+// Centralized navigation without external routing
+// State-based view switching
+// Conditional menu items based on login status
+// Responsive navigation bar
+```
+
+**Navigation Features:**
+- Simple state-based routing system
+- Clean navigation bar with icons
+- Context-aware menu options
+- Mobile-friendly responsive design
+
+#### 2. Styling System (`src/styles/Groups.css`)
+```css
+/* Group-specific styling for consistent UI */
+/* Card layouts for groups and members */
+/* Button styles for different actions */
+/* Responsive design for all screen sizes */
+```
+
+**Design Features:**
+- Consistent color scheme and typography
+- Card-based layouts for better organization
+- Hover effects and transitions
+- Mobile-responsive design
+- Accessible color contrasts
+
+### 🔐 Security Implementation
+
+#### 1. Authentication & Authorization
+- **Session-based Authentication**: Secure user sessions
+- **Route Protection**: All sensitive endpoints require login
+- **Role-based Permissions**: Different access levels for users
+- **CSRF Protection**: Session configuration prevents cross-site attacks
+
+#### 2. Data Protection
+- **Input Validation**: All forms validate user input
+- **SQL Injection Prevention**: SQLAlchemy ORM provides protection
+- **XSS Prevention**: Proper HTML escaping in React components
+- **Secure Sessions**: HTTPOnly cookies with proper configuration
+
+### 📊 Performance & Scalability
+
+#### 1. Database Optimization
+- **Efficient Queries**: Proper indexing on foreign keys
+- **Minimal Data Transfer**: Only fetch necessary data
+- **Connection Pooling**: SQLAlchemy manages database connections
+- **Query Optimization**: Use of joins to reduce query count
+
+#### 2. Frontend Performance
+- **Component Optimization**: Efficient React state management
+- **Code Splitting**: Modular component structure
+- **Lazy Loading**: Components load only when needed
+- **Bundle Optimization**: Vite provides efficient bundling
+
+## 🛠️ Development Workflow
+
+### 1. Backend Development
+```bash
+# Start backend server
+cd backend
+python run.py
+
+# Database operations
+flask db init     # Initialize database
+flask db migrate  # Create migrations
+flask db upgrade  # Apply migrations
+```
+
+### 2. Frontend Development
+```bash
+# Start frontend server
+cd frontend
+npm install       # Install dependencies
+npm run dev       # Start development server
+```
+
+### 3. Environment Configuration
+```env
+# Required environment variables in .env
+FLASK_ENV=development
+SECRET_KEY=dev-secret-key-for-sessions
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```

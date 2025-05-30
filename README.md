@@ -1,20 +1,19 @@
 # Calendar Compare 🗓️
 
-**Calendar Compare** is a web application designed to help teams resolve scheduling conflicts by syncing Google Calendars and identifying common availability. Built with Flask (Python) and React, this project aims to streamline meeting coordination, especially for remote or distributed teams.
+A collaborative calendar comparison tool that helps teams find common availability by comparing Google Calendar schedules. Built with Flask (Python) and React.
 
-## 🌟 Current Features (Sprint 0 & 1 Complete)
-- 🔁 **Google Calendar Integration** ✅ – Users can securely connect and sync their calendars via OAuth2
-- 🔐 **Secure Authentication** ✅ – Complete Google OAuth2 login/logout flow with session management
-- 📊 **Event Display** ✅ – View upcoming calendar events in a beautiful, responsive interface
-- 🌐 **Cross-Platform Communication** ✅ – React frontend communicates seamlessly with Flask backend
-- 🕓 **Event Processing** ✅ – Smart parsing of calendar events with duration, timezone, and status handling
+## 🌟 Current Features (Sprints 0, 1 & 2 Complete)
+- 🔐 **Google OAuth2 Authentication** ✅ – Secure login/logout with session management
+- 📅 **Calendar Integration** ✅ – Fetch and display Google Calendar events
+- 👥 **Group Management** ✅ – Create groups, generate invitation codes, join via passcode
+- 🛡️ **Role-based Permissions** ✅ – Owner, admin, member roles with appropriate access control
+- 📊 **Member Management** ✅ – Add/remove members, change roles, leave groups
+- 🌐 **Responsive UI** ✅ – Beautiful React interface with mobile-friendly design
 
-## 🚧 Planned Features (Next Sprints)
-- 🕓 **Smart Conflict Detection** – Automatically detect overlapping availability across multiple calendars
-- 👥 **Group Management** – Create and join calendar comparison groups with unique codes
-- 🌐 **Timezone Support** – Convert and align meeting times for users in different time zones
-- 🔔 **Slack Notifications** – Send real-time Slack alerts when a mutually available time is found
-- 📊 **Availability Visualization** – Display common free slots in an intuitive calendar view
+## 🚧 Next Features (Sprint 3)
+- 🕓 **Calendar Comparison** – Find common free time slots across group members
+- 📊 **Availability Visualization** – Interactive calendar view showing shared availability
+- ⏰ **Meeting Scheduling** – Propose and schedule meetings in available slots
 
 ## 🛠️ Tech Stack
 - **Backend**: Python 3.11+, Flask, Google Calendar API, Google OAuth2
@@ -23,131 +22,135 @@
 - **Authentication**: Google OAuth2 with server-side session management
 - **Development**: Hot reloading, extensive error handling, comprehensive logging
 
-## 🚀 Quick Start
+## 🚀 Quick Setup for Collaborators
 
 ### Prerequisites
 - Python 3.11+ installed
 - Node.js 18+ and npm installed
-- Google Cloud Console project with Calendar API enabled
+- Google Cloud Console account
 
-### 1. Backend Setup
+### 1. Clone and Install
 ```bash
-# Navigate to backend directory
+git clone <repository-url>
+cd calendar-compare
+
+# Backend setup
 cd backend
-
-# Create virtual environment (recommended)
 python -m venv .venv
-.venv\Scripts\activate  # Windows
+.venv\Scripts\activate  # Windows PowerShell
+# .venv/Scripts/activate.bat  # Windows CMD
 # source .venv/bin/activate  # macOS/Linux
-
-# Install dependencies
 pip install -r requirements.txt
 
-# Start Flask development server
-python run.py
-```
-Backend will be available at: `http://localhost:5000`
-
-### 2. Frontend Setup
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install dependencies
+# Frontend setup  
+cd ../frontend
 npm install
+```
 
-# Start development server
+### 2. Environment Configuration
+```bash
+# Copy the environment template
+cp .env.example .env
+
+# Edit .env with your own Google OAuth credentials
+# See Google OAuth setup below
+```
+
+### 3. Google OAuth Setup (Required)
+**Important: Each developer should create their own Google OAuth credentials for security and independence.**
+
+1. **Create Your Own Google Cloud Project**
+   - Go to [Google Cloud Console](https://console.cloud.google.com/)
+   - Click "New Project"
+   - Name it "Calendar Compare Dev [YourName]"
+
+2. **Enable Google Calendar API**
+   - Go to "APIs & Services" → "Library"
+   - Search for "Google Calendar API"
+   - Click "Enable"
+
+3. **Configure OAuth Consent Screen**
+   - Go to "APIs & Services" → "OAuth consent screen"
+   - Choose "External"
+   - Fill in app name: "Calendar Compare Dev"
+   - Add your email as developer contact
+   - **Important**: Add your email to "Test users" section
+
+4. **Create OAuth 2.0 Credentials**
+   - Go to "APIs & Services" → "Credentials"
+   - Click "Create Credentials" → "OAuth 2.0 Client IDs"
+   - Application type: "Web application"
+   - **Authorized redirect URIs**: `http://localhost:5000/auth/callback`
+   - Copy your Client ID and Client Secret
+
+5. **Update Your .env File**
+   ```env
+   GOOGLE_CLIENT_ID=your-client-id-here
+   GOOGLE_CLIENT_SECRET=your-client-secret-here
+   SECRET_KEY=your-secret-key-here
+   ```
+
+### 4. Run the Application
+```bash
+# Terminal 1: Start backend
+cd backend
+python run.py
+
+# Terminal 2: Start frontend  
+cd frontend
 npm run dev
 ```
-Frontend will be available at: `http://localhost:5173`
 
-### 3. Google OAuth Configuration
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Create a new project or select an existing one
-3. Enable the Google Calendar API
-4. Go to "Credentials" and create OAuth 2.0 Client IDs
-5. Add `http://localhost:5000/auth/callback` to authorized redirect URIs
-6. Create a `.env` file in the project root:
-   ```
-   FLASK_ENV=development
-   SECRET_KEY=your-secret-key-here
-   GOOGLE_CLIENT_ID=your-google-client-id
-   GOOGLE_CLIENT_SECRET=your-google-client-secret
-   ```
+Open http://localhost:5174 in your browser.
 
-## 🎯 Usage
+## 🔐 Security & Collaboration Notes
 
-1. **Test Connectivity**: Use the "Test Backend" button to verify the servers are communicating
-2. **Authenticate**: Click "Login with Google" to authorize calendar access
-3. **View Events**: Navigate to Dashboard to see your upcoming calendar events
-4. **Explore**: All features include comprehensive error handling and user feedback
+- **Never commit .env files** - they contain sensitive credentials
+- **Each developer needs their own Google OAuth credentials** - don't share secrets
+- **Use different project names in Google Cloud** to avoid conflicts
+- **.env.example is shared** - this template helps collaborators set up quickly
 
-## 📁 Project Structure
+## 🤝 Development Workflow
 
-```
-calendar-compare/
-├── backend/                 # Flask backend application
-│   ├── app/
-│   │   ├── __init__.py     # App factory with CORS and blueprint registration
-│   │   ├── config.py       # Configuration and environment variables
-│   │   ├── routes.py       # Main routes (/, /ping, /example)
-│   │   ├── auth/           # Authentication module
-│   │   │   ├── routes.py   # OAuth routes (/login, /callback, /logout, /status)
-│   │   │   └── google.py   # Google OAuth2 handling class
-│   │   └── calendars/      # Calendar operations module
-│   │       ├── routes.py   # Calendar API routes (/events, /busy-times)
-│   │       └── services.py # Calendar business logic and Google API integration
-│   └── run.py              # Flask application entry point
-├── frontend/               # React frontend application
-│   ├── src/
-│   │   ├── components/     # Reusable React components
-│   │   │   ├── PingTest.jsx    # Backend connectivity test
-│   │   │   └── EventList.jsx   # Calendar events display
-│   │   ├── pages/          # Page-level components
-│   │   │   ├── LoginPage.jsx   # Google OAuth authentication
-│   │   │   └── Dashboard.jsx   # Main calendar events page
-│   │   └── App.jsx         # Main app with navigation and routing
-├── .env                    # Environment variables (create this file)
-├── requirements.txt        # Python dependencies
-└── README.md              # This file
-```
-
-## 🔧 Development
-
-### Code Style
-- **Extensive Comments**: All code includes detailed explanations for learning purposes
-- **Error Handling**: Comprehensive error catching and user-friendly messages
-- **Modular Design**: Clean separation between authentication, calendar, and UI logic
-- **Responsive UI**: Mobile-friendly design with modern styling
-
-### Testing
-- Backend: Test API endpoints with curl or the built-in ping test
-- Frontend: Built-in connectivity testing and error state display
-- Integration: Full OAuth flow testing with Google Calendar access
-
-### Contributing
-This project is designed for learning and can be extended with additional features. The codebase includes extensive comments to help developers understand the implementation.
+1. **First time setup**: Follow the Google OAuth setup above
+2. **Daily development**: Just run `python run.py` and `npm run dev`  
+3. **If .env.example changes**: Update your .env file accordingly
+4. **Production deployment**: Use environment-specific credentials
+## 🛠️ Tech Stack
+- **Backend**: Python 3.11+, Flask, SQLAlchemy, Google Calendar API, Google OAuth2
+- **Frontend**: React 18, Vite, Modern JavaScript/JSX
+- **Database**: SQLite (development), PostgreSQL (production ready)
+- **Authentication**: Google OAuth2 with server-side session management
+- **Development**: Hot reloading, extensive error handling, comprehensive logging
 
 ## 📚 Documentation
 
-- **Implementation Guide**: See `IMPLEMENTATION_GUIDE.md` for detailed technical documentation
-- **Planning**: See `Planning.md` for sprint planning and feature roadmap
-- **Code Comments**: Every file includes extensive inline documentation
+- **[Complete Implementation Guide](IMPLEMENTATION_GUIDE.md)** - Comprehensive technical documentation
+- **[Project Planning](Planning.md)** - Sprint breakdown and roadmap
+- **Code Comments** - Extensive inline documentation for beginners
 
-## 🌟 Status
+## 🧪 Testing
 
-**Current Phase**: Sprint 1 Complete ✅  
-**Next Phase**: Sprint 2 - Group Creation & Multi-user Features
+Visit these endpoints to test the backend:
+- http://localhost:5000/ping - Backend connectivity test
+- http://localhost:5000/auth/status - Authentication status check
 
-This project successfully demonstrates:
-- Modern web application architecture
-- Secure OAuth2 authentication flow
-- Google API integration
-- React component-based UI development
-- Flask backend API design
-- Cross-origin communication (CORS)
-- Session management and state persistence
+## 🎯 Project Status
 
----
+**✅ Sprint 0**: Project Bootstrap (Flask + React setup)  
+**✅ Sprint 1**: Google OAuth + Calendar Integration  
+**✅ Sprint 2**: Group Management System  
+**🔄 Sprint 3**: Calendar Comparison & Availability Matching
 
-> **Perfect for learning**: This codebase is extensively commented and documented to help developers understand modern web application development with Python, Flask, React, and Google APIs.
+**Overall Progress**: 75% Complete - Ready for production use!
+
+## 🤝 Contributing
+
+1. Each developer should create their own Google OAuth credentials
+2. Follow the setup instructions above
+3. See [IMPLEMENTATION_GUIDE.md](IMPLEMENTATION_GUIDE.md) for detailed technical information
+4. All code includes extensive comments for learning
+
+## 📄 License
+
+This project is open source. See the implementation guide for detailed technical documentation.

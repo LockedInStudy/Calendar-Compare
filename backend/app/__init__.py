@@ -16,11 +16,10 @@ def create_app():
     Application factory function that creates and configures a Flask application
     This pattern is recommended for Flask apps as it makes testing easier
     and allows multiple app instances with different configurations
-    """
-    
-    # Load environment variables from .env file
+    """    # Load environment variables from .env file
     # This allows us to store sensitive information like API keys securely
-    load_dotenv()
+    # The .env file is in the project root directory (parent of backend)
+    load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '..', '..', '.env'), override=True)
     
     # Create a new Flask application instance
     # __name__ tells Flask where to find resources relative to this file
