@@ -1,7 +1,14 @@
+# Flask web framework and related packages
 flask
 flask-sqlalchemy
 flask-migrate
+flask-cors
+
+# Google API packages for OAuth2 and Calendar integration
 google-api-python-client
 google-auth
 google-auth-oauthlib
-python-dotenv
+
+# Utility packages
+python-dotenv  # For loading environment variables from .env file
+pytz          # For timezone handling in calendar operations
