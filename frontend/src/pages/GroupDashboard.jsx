@@ -18,6 +18,9 @@
 import React, { useState, useEffect } from 'react';
 // Import our group styling
 import '../styles/Groups.css';
+// Import new calendar components
+import GroupCalendar from './GroupCalendar';
+import ScheduleMeeting from './ScheduleMeeting';
 
 // GroupDashboard component - displays detailed information about a specific group
 function GroupDashboard({ groupId, onBackToDashboard }) {
@@ -27,9 +30,14 @@ function GroupDashboard({ groupId, onBackToDashboard }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [userRole, setUserRole] = useState('member');
-      // UI state for various actions
+    
+    // UI state for various actions
     const [showJoinCode, setShowJoinCode] = useState(false);
     const [confirmLeave, setConfirmLeave] = useState(false);
+    
+    // New state for calendar features
+    const [currentView, setCurrentView] = useState('overview'); // 'overview', 'calendar', 'schedule'
+    const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
     /**
      * Fetch group details when component mounts or groupId changes
@@ -267,19 +275,100 @@ function GroupDashboard({ groupId, onBackToDashboard }) {
 
             {/* Calendar Comparison Section */}
             <div style={{ marginTop: '30px' }}>
-                <h2>📅 Calendar Comparison</h2>
-                <div style={{
-                    padding: '20px',
-                    backgroundColor: '#f8f9fa',
-                    borderRadius: '8px',
-                    border: '1px solid #ddd',
-                    textAlign: 'center'
-                }}>
-                    <p>🚧 Calendar comparison features coming in Sprint 3!</p>
-                    <p style={{ fontSize: '14px', color: '#666' }}>
-                        Soon you'll be able to compare calendars and find mutual free time.
-                    </p>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                    <h2>📅 Calendar Comparison</h2>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <button
+                            onClick={() => setCurrentView('overview')}
+                            className={currentView === 'overview' ? 'btn-primary' : 'btn-secondary'}
+                        >
+                            Overview
+                        </button>
+                        <button
+                            onClick={() => setCurrentView('calendar')}
+                            className={currentView === 'calendar' ? 'btn-primary' : 'btn-secondary'}
+                        >
+                            Calendar View
+                        </button>
+                        <button
+                            onClick={() => setCurrentView('schedule')}
+                            className={currentView === 'schedule' ? 'btn-primary' : 'btn-secondary'}
+                        >
+                            Schedule Meeting
+                        </button>
+                    </div>
                 </div>
+
+                {currentView === 'overview' && (
+                    <div style={{
+                        padding: '20px',
+                        backgroundColor: '#f8f9fa',
+                        borderRadius: '8px',
+                        border: '1px solid #ddd'
+                    }}>
+                        <h3>📊 Group Calendar Overview</h3>
+                        <p style={{ marginBottom: '15px' }}>
+                            Compare calendars and find mutual free time with your group members.
+                        </p>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginTop: '20px' }}>
+                            <div style={{ padding: '15px', backgroundColor: 'white', borderRadius: '6px', border: '1px solid #ddd' }}>
+                                <h4 style={{ color: '#28a745', margin: '0 0 10px 0' }}>� Find Available Times</h4>
+                                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                                    View when all group members are free
+                                </p>
+                            </div>
+                            <div style={{ padding: '15px', backgroundColor: 'white', borderRadius: '6px', border: '1px solid #ddd' }}>
+                                <h4 style={{ color: '#007bff', margin: '0 0 10px 0' }}>📅 Visual Calendar</h4>
+                                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                                    Interactive calendar with availability display
+                                </p>
+                            </div>
+                            <div style={{ padding: '15px', backgroundColor: 'white', borderRadius: '6px', border: '1px solid #ddd' }}>
+                                <h4 style={{ color: '#17a2b8', margin: '0 0 10px 0' }}>⏰ Schedule Meetings</h4>
+                                <p style={{ fontSize: '14px', color: '#666', margin: 0 }}>
+                                    Create meetings for optimal times
+                                </p>
+                            </div>
+                        </div>
+                        <div style={{ marginTop: '20px', textAlign: 'center' }}>
+                            <button
+                                onClick={() => setCurrentView('calendar')}
+                                className="btn-primary"
+                                style={{ marginRight: '10px' }}
+                            >
+                                View Calendar
+                            </button>
+                            <button
+                                onClick={() => setCurrentView('schedule')}
+                                className="btn-secondary"
+                            >
+                                Schedule Meeting
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {currentView === 'calendar' && (
+                    <GroupCalendar 
+                        groupId={group.id}
+                        onScheduleMeeting={(timeSlot) => {
+                            setSelectedTimeSlot(timeSlot);
+                            setCurrentView('schedule');
+                        }}
+                    />
+                )}
+
+                {currentView === 'schedule' && (
+                    <ScheduleMeeting 
+                        groupId={group.id}
+                        selectedTimeSlot={selectedTimeSlot}
+                        onBack={() => setCurrentView('calendar')}
+                        onMeetingCreated={() => {
+                            setCurrentView('overview');
+                            setSelectedTimeSlot(null);
+                        }}
+                    />
+                )}
             </div>
 
             {/* Group Management Section */}

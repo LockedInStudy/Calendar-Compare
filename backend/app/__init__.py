@@ -53,7 +53,12 @@ def create_app():
     # Import and register the groups blueprint
     # This handles group creation, joining, and management routes
     from .groups.routes import groups_bp
-    app.register_blueprint(groups_bp)    # Import models to ensure they are registered with SQLAlchemy
+    app.register_blueprint(groups_bp)
+    
+    # Import and register the availability blueprint
+    # This handles calendar comparison and availability calculation routes
+    from .availability.routes import availability_bp
+    app.register_blueprint(availability_bp)    # Import models to ensure they are registered with SQLAlchemy
     # This must be done after db.init_app() but before first request
     from . import models
 

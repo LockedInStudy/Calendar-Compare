@@ -334,14 +334,96 @@ frontend/
 
 ---
 
-## 🏁 PROJECT STATUS SUMMARY
+## 🚀 Sprint 3 - Calendar Comparison & Availability Matching (IN PROGRESS)
+
+### 🎯 Goals
+- **Primary Goal**: Find common free time slots across group members
+- **Secondary Goals**: Visual calendar interface, meeting scheduling, time zone support
+
+### 📋 Detailed Implementation Plan
+
+#### 🔧 Backend Implementation (Flask/Python)
+1. **Availability Engine (`app/availability/`)**
+   - `services.py` - Core algorithm for finding free time slots
+   - `routes.py` - API endpoints for availability queries
+   - `models.py` - Data models for availability sessions
+   - `algorithms.py` - Time slot intersection algorithms
+
+2. **Calendar Aggregation (`app/calendars/` enhancements)**
+   - Bulk calendar fetching for group members
+   - Busy time calculation and caching
+   - Time zone normalization
+   - Recurring event handling
+
+3. **Meeting Scheduling (`app/meetings/`)**
+   - Meeting proposal system
+   - RSVP and confirmation workflow
+   - Calendar event creation
+   - Notification system
+
+#### � Frontend Implementation (React/JSX)
+1. **Calendar Visualization**
+   - `pages/GroupCalendar.jsx` - Main calendar comparison view
+   - `components/AvailabilityCalendar.jsx` - Interactive calendar widget
+   - `components/TimeSlotPicker.jsx` - Time range selection
+   - `components/MemberSchedule.jsx` - Individual member calendar overlay
+
+2. **Meeting Interface**
+   - `pages/ScheduleMeeting.jsx` - Meeting creation form
+   - `components/ProposedMeetings.jsx` - Meeting proposal display
+   - `components/RSVPStatus.jsx` - Response tracking
+   - `components/TimeZoneSelector.jsx` - Time zone conversion
+
+3. **Advanced Features**
+   - `components/AvailabilityFilters.jsx` - Duration, time, member filters
+   - `components/ExportOptions.jsx` - Export calendar data
+   - `components/RecurringAvailability.jsx` - Weekly pattern analysis
+
+### 🔄 Implementation Tasks
+
+#### Phase 1: Core Availability Engine
+- [ ] **Task 1.1**: Implement time slot intersection algorithm
+- [ ] **Task 1.2**: Create availability calculation service
+- [ ] **Task 1.3**: Build API endpoints for group availability queries
+- [ ] **Task 1.4**: Add caching for performance optimization
+
+#### Phase 2: Calendar Visualization
+- [ ] **Task 2.1**: Create responsive calendar grid component
+- [ ] **Task 2.2**: Implement time slot highlighting for free times
+- [ ] **Task 2.3**: Add member overlay toggle functionality
+- [ ] **Task 2.4**: Integrate with backend availability API
+
+#### Phase 3: Meeting Scheduling
+- [ ] **Task 3.1**: Build meeting proposal creation system
+- [ ] **Task 3.2**: Implement RSVP workflow
+- [ ] **Task 3.3**: Add calendar event creation via Google Calendar API
+- [ ] **Task 3.4**: Create notification system for meeting updates
+
+#### Phase 4: Advanced Features
+- [ ] **Task 4.1**: Add time zone support and conversion
+- [ ] **Task 4.2**: Implement availability filtering options
+- [ ] **Task 4.3**: Create data export functionality
+- [ ] **Task 4.4**: Add recurring availability pattern analysis
+
+### 🎯 Success Metrics
+- **Core Functionality**: Groups can find common 30+ minute time slots
+- **Performance**: Availability calculation completes in <2 seconds for 10 members
+- **Usability**: Calendar interface shows free times visually
+- **Integration**: Meeting proposals create actual Google Calendar events
+
+---
+
+## �🏁 PROJECT STATUS SUMMARY
 
 ### ✅ Completed Sprints
 - **Sprint 0**: ✅ Project Bootstrap (Flask + React setup)
 - **Sprint 1**: ✅ Google Integration (OAuth + Calendar API)  
 - **Sprint 2**: ✅ Group Management (Create, Join, Manage groups)
 
-### 📊 Overall Progress: **75% Complete**
+### 🔄 Current Sprint
+- **Sprint 3**: 🚧 Calendar Comparison & Availability Matching (IN PROGRESS)
+
+### 📊 Overall Progress: **75% Complete → Target: 100% Complete**
 
 **Ready for Production Use:**
 - ✅ User authentication with Google OAuth
@@ -351,13 +433,8 @@ frontend/
 - ✅ Responsive React frontend with intuitive navigation
 - ✅ Comprehensive documentation for developers
 
-### 🚀 Next Sprint (Sprint 3 - Calendar Comparison)
-**Goal**: Implement the core calendar comparison functionality
-- 🔄 Find common free time slots across group members
-- 🔄 Visual calendar comparison interface
-- 🔄 Schedule meeting proposals
-- 🔄 Export shared availability windows
-- 🔄 Advanced filtering and time zone support
+### 🎯 Sprint 3 Completion Target
+**Goal**: Complete the core calendar comparison functionality to make this a fully functional scheduling tool
 
 ### 🛠️ Technical Foundation Ready
 The project now has a solid foundation with:

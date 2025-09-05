@@ -1,0 +1,350 @@
+/* Availability Calendar Styles */
+.availability-calendar {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin: 20px 0;
+}
+
+/* Calendar Navigation */
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.nav-button {
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;
+}
+
+.nav-button:hover {
+    background: #0056b3;
+}
+
+.current-period {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* Calendar Grid */
+.calendar-grid {
+    display: flex;
+    gap: 1px;
+    background: #e9ecef;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+/* Time Column */
+.time-column {
+    background: #f8f9fa;
+    min-width: 100px;
+    border-right: 1px solid #dee2e6;
+}
+
+.time-header {
+    height: 60px;
+    border-bottom: 1px solid #dee2e6;
+    background: #e9ecef;
+}
+
+.time-label {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    color: #666;
+    border-bottom: 1px solid #dee2e6;
+    background: #f8f9fa;
+}
+
+/* Day Columns */
+.day-column {
+    flex: 1;
+    min-width: 80px;
+    background: white;
+}
+
+.day-header {
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.day-name {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.day-date {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-top: 2px;
+}
+
+/* Time Slots */
+.time-slot {
+    height: 30px;
+    border-bottom: 1px solid #f1f3f4;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+/* Availability States */
+.time-slot.unavailable {
+    background: #ffffff;
+}
+
+.time-slot.low-availability {
+    background: #fff3e0;
+    border-left: 3px solid #ff9800;
+}
+
+.time-slot.medium-availability {
+    background: #e8f5e8;
+    border-left: 3px solid #4caf50;
+}
+
+.time-slot.high-availability {
+    background: #e3f2fd;
+    border-left: 3px solid #2196f3;
+}
+
+.time-slot.selected {
+    background: #ffeb3b !important;
+    border: 2px solid #fbc02d !important;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.time-slot:hover {
+    background: #f5f5f5;
+    border-radius: 4px;
+    z-index: 5;
+}
+
+.time-slot.low-availability:hover {
+    background: #ffe0b2;
+}
+
+.time-slot.medium-availability:hover {
+    background: #c8e6c9;
+}
+
+.time-slot.high-availability:hover {
+    background: #bbdefb;
+}
+
+/* Availability Indicator */
+.availability-indicator {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    z-index: 2;
+}
+
+.duration {
+    background: rgba(0,0,0,0.7);
+    color: white;
+    font-size: 10px;
+    padding: 1px 4px;
+    border-radius: 2px;
+    line-height: 1;
+}
+
+/* Legend */
+.calendar-legend {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+}
+
+.calendar-legend h4 {
+    margin: 0 0 10px 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #666;
+}
+
+.legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+}
+
+.legend-color.unavailable {
+    background: #ffffff;
+}
+
+.legend-color.low-availability {
+    background: #fff3e0;
+    border-color: #ff9800;
+}
+
+.legend-color.medium-availability {
+    background: #e8f5e8;
+    border-color: #4caf50;
+}
+
+.legend-color.high-availability {
+    background: #e3f2fd;
+    border-color: #2196f3;
+}
+
+/* Tooltip */
+.slot-tooltip {
+    position: fixed;
+    background: rgba(0,0,0,0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    z-index: 1000;
+    pointer-events: none;
+    transform: translate(-50%, -100%);
+    margin-top: -10px;
+}
+
+.slot-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    border: 5px solid transparent;
+    border-top-color: rgba(0,0,0,0.9);
+    transform: translateX(-50%);
+}
+
+.tooltip-content {
+    text-align: center;
+}
+
+.tooltip-day {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.tooltip-time {
+    margin-bottom: 4px;
+}
+
+.tooltip-availability {
+    border-top: 1px solid rgba(255,255,255,0.3);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+.tooltip-unavailable {
+    color: #ff9999;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .calendar-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .time-column {
+        min-width: 80px;
+    }
+    
+    .time-label {
+        font-size: 10px;
+        padding: 0 4px;
+    }
+    
+    .day-column {
+        min-width: 40px;
+    }
+    
+    .day-header {
+        height: 50px;
+    }
+    
+    .day-name {
+        font-size: 10px;
+    }
+    
+    .day-date {
+        font-size: 14px;
+    }
+    
+    .time-slot {
+        height: 25px;
+    }
+    
+    .duration {
+        font-size: 8px;
+        padding: 1px 2px;
+    }
+    
+    .legend-items {
+        flex-direction: column;
+        gap: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .availability-calendar {
+        padding: 15px;
+        margin: 15px 0;
+    }
+    
+    .calendar-grid {
+        font-size: 10px;
+    }
+    
+    .time-column {
+        min-width: 60px;
+    }
+    
+    .day-column {
+        min-width: 30px;
+    }
+    
+    .time-slot {
+        height: 20px;
+    }
+    
+    .availability-indicator {
+        display: none; /* Hide duration labels on very small screens */
+    }
+}
